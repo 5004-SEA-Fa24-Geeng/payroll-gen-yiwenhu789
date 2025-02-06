@@ -8,7 +8,85 @@ This document is meant to provide a tool for you to demonstrate the design proce
 
 Place your class diagram below. Make sure you check the fil in the browser on github.com to make sure it is rendering correctly. If it is not, you will need to fix it. As a reminder, here is a link to tools that can help you create a class diagram: [Class Resources: Class Design Tools](https://github.com/CS5004-khoury-lionelle/Resources?tab=readme-ov-file#uml-design-tools)
 
+```mermaid
+classDiagram
+    class PayrollGenerator {
+        - DEFAULT_EMPLOYEE_FILE : String
+        - DEFAULT_PAYROLL_FILE : String
+        - DEFAULT_TIME_CARD_FILE : String
+        + main(String[] args) : void
+    }
 
+    class FileUtil {
+        + readFileToList(String file) : List<String>
+        + writeFile(String outFile, List<String> lines)
+    }
+
+    class Builder {
+        + buildEmployeeFromCSV(String csv) : IEmployee
+        + buildTimeCardFromCSV(String csv) : ITimeCard
+    }
+
+    class IEmployee {
+        <<interface>>
+        + getName() : String
+        + getID() : String
+        + getPayRate() : double
+        + getEmployeeType() : String
+        + getYTDEarnings() : double
+        + getYTDTaxesPaid() : double
+        + getPretaxDeductions() : double
+        + runPayroll(double hoursWorked) : IPayStub
+        + toCSV() : String
+    }
+
+    class HourlyEmployee {
+        - name : String
+        - id : String
+        - payRate : double
+        - ytdEarnings : double
+        - ytdTaxesPaid : double
+        - pretaxDeductions : double
+        + getEmployeeType() : String
+        + runPayroll(double hoursWorked) : IPayStub
+        + toCSV() : String
+    }
+
+    class SalaryEmployee {
+        - name : String
+        - id : String
+        - payRate : double
+        - ytdEarnings : double
+        - ytdTaxesPaid : double
+        - pretaxDeductions : double
+        + getEmployeeType() : String
+        + runPayroll(double hoursWorked) : IPayStub
+        + toCSV() : String
+    }
+
+    class IPayStub {
+        <<interface>>
+        + getPay() : double
+        + getTaxesPaid() : double
+        + toCSV() : String
+    }
+
+    class ITimeCard {
+        <<interface>>
+        + getEmployeeID() : String
+        + getHoursWorked() : double
+    }
+
+    PayrollGenerator --> FileUtil : uses
+    PayrollGenerator --> Builder : uses
+    PayrollGenerator --> IEmployee : interacts with
+    PayrollGenerator --> ITimeCard : interacts with
+    PayrollGenerator --> IPayStub : generates
+    Builder --> IEmployee : builds
+    Builder --> ITimeCard : builds
+    IEmployee <|-- HourlyEmployee
+    IEmployee <|-- SalaryEmployee
+```
 
 
 
