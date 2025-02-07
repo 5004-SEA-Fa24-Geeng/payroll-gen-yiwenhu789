@@ -1,5 +1,8 @@
 package student;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class HourlyEmployee implements IEmployee {
     private String name;
     private String id;
@@ -40,9 +43,35 @@ public class HourlyEmployee implements IEmployee {
 
     @Override
     public IPayStub runPayroll(double hoursWorked) {
-        // Implementation for generating pay stub will be added later
-        return null;
+        if (hoursWorked < 0) {
+            return null; // Skip employees with negative hours
+        }
+
+        // Calculate gross pay with overtime
+        double regularHours = Math.min(40, hoursWorked);
+        double overtimeHours = Math.max(0, hoursWorked - 40);
+        double grossPay = round((regularHours * payRate) + (overtimeHours * payRate * 1.5));
+
+        // Apply pre-tax deductions
+        double taxableIncome = round(grossPay - pretaxDeductions);
+
+        // Calculate taxes (22.65% of taxable income)
+        double taxesPaid = round(taxableIncome * 0.2265);
+
+        // Calculate final net pay
+        double netPay = round(taxableIncome - taxesPaid);
+
+        // Update YTD earnings and taxes paid
+        this.ytdEarnings = round(ytdEarnings + grossPay);
+        this.ytdTaxesPaid = round(ytdTaxesPaid + taxesPaid);
+
+        return new PayStub(this.name, netPay, taxesPaid, this.ytdEarnings, this.ytdTaxesPaid);
     }
+
+    private double round(double value) {
+        return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
 
     @Override
     public String toCSV() {
