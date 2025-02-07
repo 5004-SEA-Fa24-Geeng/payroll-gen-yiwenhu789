@@ -10,7 +10,7 @@ public class PayStubTest {
 
         assertEquals(1500, payStub.getPay(), 0.01);
         assertEquals(300, payStub.getTaxesPaid(), 0.01);
-        assertEquals("Yiwen Hu,1500.00,300.00,10000.00,1500.00", payStub.toCSV());
+        assertEquals("Yiwen Hu,1500.0,300.0,10000.0,1500.0", payStub.toCSV());
     }
 }
 

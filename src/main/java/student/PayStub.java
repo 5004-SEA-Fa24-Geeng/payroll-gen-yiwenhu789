@@ -1,5 +1,8 @@
 package student;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class PayStub implements IPayStub {
     private final String employeeName;
     private final double netPay;
@@ -43,7 +46,13 @@ public class PayStub implements IPayStub {
      */
     @Override
     public String toCSV() {
-        return String.format("%s,%.2f,%.2f,%.2f,%.2f",
-                employeeName, netPay, taxesPaid, ytdEarnings, ytdTaxesPaid);
+        return String.format("%s,%s,%s,%s,%s",
+                employeeName, formatDouble(netPay), formatDouble(taxesPaid),
+                formatDouble(ytdEarnings), formatDouble(ytdTaxesPaid));
+    }
+
+    private String formatDouble(double value) {
+        String formatted = String.format("%.2f", value);
+        return formatted;
     }
 }

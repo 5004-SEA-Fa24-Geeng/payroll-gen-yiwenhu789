@@ -134,7 +134,7 @@ Note: you often don't know all the tests as you write. As such, it is alright to
 
 Here are a few tips to help you implement the program:
 
-1. An PayStub can have a reference to the employee (as compared to copying all the info). 
+1. An PayStub can havaqaqe a reference to the employee (as compared to copying all the info). 
 
 2. You can use the `String.split(",")` method to split a line of a csv file into an array of strings. For example:  
    ```java

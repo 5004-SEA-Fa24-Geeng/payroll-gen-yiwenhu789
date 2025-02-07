@@ -44,32 +44,30 @@ public class HourlyEmployee implements IEmployee {
     @Override
     public IPayStub runPayroll(double hoursWorked) {
         if (hoursWorked < 0) {
-            return null; // Skip employees with negative hours
+            return null;
         }
 
-        // Calculate gross pay with overtime
         double regularHours = Math.min(40, hoursWorked);
         double overtimeHours = Math.max(0, hoursWorked - 40);
-        double grossPay = round((regularHours * payRate) + (overtimeHours * payRate * 1.5));
+        double grossPay = regularHours * payRate + overtimeHours * payRate * 1.5;
 
-        // Apply pre-tax deductions
-        double taxableIncome = round(grossPay - pretaxDeductions);
+        double taxableIncome = grossPay - pretaxDeductions;
 
-        // Calculate taxes (22.65% of taxable income)
-        double taxesPaid = round(taxableIncome * 0.2265);
+        double taxesPaid = taxableIncome * 0.2265;
 
-        // Calculate final net pay
-        double netPay = round(taxableIncome - taxesPaid);
+        double netPay = taxableIncome - taxesPaid;
 
-        // Update YTD earnings and taxes paid
-        this.ytdEarnings = round(ytdEarnings + grossPay);
+        this.ytdEarnings = round(ytdEarnings + netPay);
         this.ytdTaxesPaid = round(ytdTaxesPaid + taxesPaid);
 
-        return new PayStub(this.name, netPay, taxesPaid, this.ytdEarnings, this.ytdTaxesPaid);
+        return new PayStub(this.name, round(netPay), round(taxesPaid), this.ytdEarnings, this.ytdTaxesPaid);
     }
 
     private double round(double value) {
-        return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
+        double rounded = bd.doubleValue();
+
+        return rounded;
     }
 
 
