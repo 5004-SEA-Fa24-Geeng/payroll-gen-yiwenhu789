@@ -4,14 +4,36 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class SalaryEmployee implements IEmployee {
+    /** The name of the employee */
     private String name;
+
+    /** The unique employee ID */
     private String id;
+
+    /** The annual salary of the employee */
     private double payRate;
+
+    /** The year-to-date earnings of the employee */
     private double ytdEarnings;
+
+    /** The year-to-date taxes paid by the employee */
     private double ytdTaxesPaid;
+
+    /** The pre-tax deductions applied to the employee's salary */
     private double pretaxDeductions;
 
-    public SalaryEmployee(String name, String id, double payRate, double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions) {
+    /**
+     * Constructs a SalaryEmployee with the given details.
+     *
+     * @param name The name of the employee
+     * @param id The unique employee ID
+     * @param payRate The annual salary of the employee
+     * @param ytdEarnings The total earnings of the employee for the year
+     * @param ytdTaxesPaid The total taxes paid by the employee for the year
+     * @param pretaxDeductions The total pre-tax deductions applied to the employee
+     */
+    public SalaryEmployee(String name, String id, double payRate, double ytdEarnings,
+                          double ytdTaxesPaid, double pretaxDeductions) {
         this.name = name;
         this.id = id;
         this.payRate = payRate;
@@ -21,25 +43,39 @@ public class SalaryEmployee implements IEmployee {
     }
 
     @Override
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     @Override
-    public String getID() { return id; }
+    public String getID() {
+        return id;
+    }
 
     @Override
-    public double getPayRate() { return payRate; }
+    public double getPayRate() {
+        return payRate;
+    }
 
     @Override
-    public String getEmployeeType() { return "Salary"; }
+    public String getEmployeeType() {
+        return "Salary";
+    }
 
     @Override
-    public double getYTDEarnings() { return ytdEarnings; }
+    public double getYTDEarnings() {
+        return ytdEarnings;
+    }
 
     @Override
-    public double getYTDTaxesPaid() { return ytdTaxesPaid; }
+    public double getYTDTaxesPaid() {
+        return ytdTaxesPaid;
+    }
 
     @Override
-    public double getPretaxDeductions() { return pretaxDeductions; }
+    public double getPretaxDeductions() {
+        return pretaxDeductions;
+    }
 
     @Override
     public IPayStub runPayroll(double hoursWorked) {
@@ -71,7 +107,7 @@ public class SalaryEmployee implements IEmployee {
 
     @Override
     public String toCSV() {
-        return String.format("Salary,%s,%s,%.2f,%.2f,%.2f,%.2f",
+        return String.format("SALARY,%s,%s,%.2f,%.2f,%.2f,%.2f",
                 name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
     }
 }

@@ -1,7 +1,10 @@
 package student;
 
 public class TimeCard implements ITimeCard {
+    /** The unique ID of the employee associated with this timecard */
     private String employeeID;
+
+    /** The total number of hours worked by the employee for the payroll period */
     private double hoursWorked;
 
     /**
