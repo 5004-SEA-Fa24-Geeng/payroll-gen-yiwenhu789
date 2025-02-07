@@ -4,22 +4,22 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class HourlyEmployee implements IEmployee {
-    /** The name of the employee */
+    /** The name of the employee. */
     private String name;
 
-    /** The unique employee ID */
+    /** The unique employee ID. */
     private String id;
 
-    /** The hourly pay rate of the employee */
+    /** The hourly pay rate of the employee. */
     private double payRate;
 
-    /** The year-to-date earnings of the employee */
+    /** The year-to-date earnings of the employee. */
     private double ytdEarnings;
 
-    /** The year-to-date taxes paid by the employee */
+    /** The year-to-date taxes paid by the employee. */
     private double ytdTaxesPaid;
 
-    /** The pre-tax deductions applied to the employee's salary */
+    /** The pre-tax deductions applied to the employee's salary. */
     private double pretaxDeductions;
 
     /**

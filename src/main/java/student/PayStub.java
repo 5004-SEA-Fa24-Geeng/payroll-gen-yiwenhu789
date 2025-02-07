@@ -1,19 +1,19 @@
 package student;
 
 public class PayStub implements IPayStub {
-    /** The name of the employee */
+    /** The name of the employee. */
     private final String employeeName;
 
-    /** The net pay received by the employee after deductions and taxes */
+    /** The net pay received by the employee after deductions and taxes. */
     private final double netPay;
 
-    /** The total taxes paid by the employee for the payroll period */
+    /** The total taxes paid by the employee for the payroll period. */
     private final double taxesPaid;
 
-    /** The employee's total year-to-date earnings */
+    /** The employee's total year-to-date earnings. */
     private final double ytdEarnings;
 
-    /** The employee's total year-to-date taxes paid */
+    /** The employee's total year-to-date taxes paid. */
     private final double ytdTaxesPaid;
 
     /**
