@@ -22,27 +22,33 @@ public final class Builder {
      * @return the employee object
      */
     public static IEmployee buildEmployeeFromCSV(String csv) {
-        String[] fields = csv.split(",");
+        String[] parts = csv.split(",");
 
-        if (fields.length != 7) {
+        if (parts.length != 7) {
             throw new IllegalArgumentException("Invalid Employee CSV format: " + csv);
         }
 
-        String employeeType = fields[0].trim();
-        String name = fields[1].trim();
-        String id = fields[2].trim();
-        double payRate = Double.parseDouble(fields[3].trim());
-        double pretaxDeductions = Double.parseDouble(fields[4].trim());
-        double ytdEarnings = Double.parseDouble(fields[5].trim());
-        double ytdTaxesPaid = Double.parseDouble(fields[6].trim());
+        String employeeType = parts[0].trim();
+        String name = parts[1].trim();
+        String id = parts[2].trim();
 
-        switch (employeeType.toUpperCase()) {
-            case "HOURLY":
-                return new HourlyEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
-            case "SALARY":
-                return new SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
-            default:
-                throw new IllegalArgumentException("Unknown employee type: " + employeeType);
+        double payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid;
+
+        try {
+            payRate = Double.parseDouble(parts[3]);
+            pretaxDeductions = Double.parseDouble(parts[4]);
+            ytdEarnings = Double.parseDouble(parts[5]);
+            ytdTaxesPaid = Double.parseDouble(parts[6]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Error parsing numeric values in CSV: " + csv, e);
+        }
+
+        if (employeeType.equalsIgnoreCase("HOURLY")) {
+            return new HourlyEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
+        } else if (employeeType.equalsIgnoreCase("SALARY")) {
+            return new SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
+        } else {
+            throw new IllegalArgumentException("Unknown employee type: " + employeeType);
         }
     }
 
@@ -55,14 +61,20 @@ public final class Builder {
      * @return a TimeCard object
      */
     public static ITimeCard buildTimeCardFromCSV(String csv) {
-        String[] fields = csv.split(",");
+        String[] parts = csv.split(",");
 
-        if (fields.length != 2) {
+        if (parts.length != 2) {
             throw new IllegalArgumentException("Invalid TimeCard CSV format: " + csv);
         }
 
-        String employeeID = fields[0].trim();
-        double hoursWorked = Double.parseDouble(fields[1].trim());
+        String employeeID = parts[0].trim();
+        double hoursWorked;
+
+        try {
+            hoursWorked = Double.parseDouble(parts[1]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Error parsing hours worked in CSV: " + csv, e);
+        }
 
         return new TimeCard(employeeID, hoursWorked);
     }
