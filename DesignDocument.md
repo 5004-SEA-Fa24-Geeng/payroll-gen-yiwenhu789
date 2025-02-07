@@ -106,8 +106,8 @@ You should feel free to number your brainstorm.
 
 1. Test that the `Employee` class properly returns `name` from `getName()`
 2. Test that the `Employee` class properly returns `id` from `getId()`
-3. continue to add your brainstorm here (you don't need to super formal - this is a brainstorm) - yes, you can change the bullets above to something that fits your design.
-
+3. Test that the `TimeCard` class properly returns `employeeId` from `getEmployeeId()`
+4. Test that the `TimeCard` class properly returns `hoursWorked` from `getHoursWorked()`
 
 
 ## (FINAL DESIGN): Class Diagram
@@ -116,7 +116,110 @@ Go through your completed code, and update your class diagram to reflect the fin
 
 > [!WARNING]
 > If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
+```mermaid
+classDiagram
+    class PayrollGenerator {
+        - DEFAULT_EMPLOYEE_FILE : String
+        - DEFAULT_PAYROLL_FILE : String
+        - DEFAULT_TIME_CARD_FILE : String
+        + main(String[] args) : void
+    }
 
+    class FileUtil {
+        + readFileToList(String file) : List<String>
+        + writeFile(String outFile, List<String> lines)
+    }
+
+    class Builder {
+        + buildEmployeeFromCSV(String csv) : IEmployee
+        + buildTimeCardFromCSV(String csv) : ITimeCard
+    }
+
+    class IEmployee {
+        <<interface>>
+        + getName() : String
+        + getID() : String
+        + getPayRate() : double
+        + getEmployeeType() : String
+        + getYTDEarnings() : double
+        + getYTDTaxesPaid() : double
+        + getPretaxDeductions() : double
+        + runPayroll(double hoursWorked) : IPayStub
+        + toCSV() : String
+    }
+
+    class HourlyEmployee {
+        - name : String
+        - id : String
+        - payRate : double
+        - ytdEarnings : double
+        - ytdTaxesPaid : double
+        - pretaxDeductions : double
+        + getEmployeeType() : String
+        + runPayroll(double hoursWorked) : IPayStub
+        + toCSV() : String
+        - round(double value) : double
+    }
+
+    class SalaryEmployee {
+        - name : String
+        - id : String
+        - payRate : double
+        - ytdEarnings : double
+        - ytdTaxesPaid : double
+        - pretaxDeductions : double
+        + getEmployeeType() : String
+        + runPayroll(double hoursWorked) : IPayStub
+        + toCSV() : String
+        - round(double value) : double
+    }
+
+    class IPayStub {
+        <<interface>>
+        + getPay() : double
+        + getTaxesPaid() : double
+        + toCSV() : String
+    }
+
+    class PayStub {
+        - employeeName : String
+        - netPay : double
+        - taxesPaid : double
+        - ytdEarnings : double
+        - ytdTaxesPaid : double
+        + getPay() : double
+        + getTaxesPaid() : double
+        + toCSV() : String
+        - formatDouble(double value) : String
+    }
+
+    class ITimeCard {
+        <<interface>>
+        + getEmployeeID() : String
+        + getHoursWorked() : double
+    }
+
+    class TimeCard {
+        - employeeID : String
+        - hoursWorked : double
+        + getEmployeeID() : String
+        + getHoursWorked() : double
+        + toCSV() : String
+    }
+
+    PayrollGenerator --> FileUtil : uses
+    PayrollGenerator --> Builder : uses
+    PayrollGenerator --> IEmployee : interacts with
+    PayrollGenerator --> ITimeCard : interacts with
+    PayrollGenerator --> IPayStub : generates
+    Builder --> IEmployee : builds
+    Builder --> ITimeCard : builds
+    IEmployee <|-- HourlyEmployee
+    IEmployee <|-- SalaryEmployee
+    IPayStub <|-- PayStub
+    ITimeCard <|-- TimeCard
+
+```
 
 
 
@@ -126,4 +229,6 @@ Go through your completed code, and update your class diagram to reflect the fin
 > [!IMPORTANT]
 > The value of reflective writing has been highly researched and documented within computer science, from learning new information to showing higher salaries in the workplace. For this next part, we encourage you to take time, and truly focus on your retrospective.
 
-Take time to reflect on how your design has changed. Write in *prose* (i.e. do not bullet point your answers - it matters in how our brain processes the information). Make sure to include what were some major changes, and why you made them. What did you learn from this process? What would you do differently next time? What was the most challenging part of this process? For most students, it will be a paragraph or two. 
+Take time to reflect on how your design has changed. Write in *prose* (i.e. do not bullet point your answers - it matters in how our brain processes the information). Make sure to include what were some major changes, and why you made them. What did you learn from this process? What would you do differently next time? What was the most challenging part of this process? For most students, it will be a paragraph or two.
+
+The biggest challenge is the implementation of the calculation part for the runPayroll() which takes most of the time to debug. I did not realize I had overlooked overtime different payrate until running the given test. Another major fix was updating year-to-date earnings using net pay instead of gross pay to ensure accuracy. So next time, I should devide such calculation process and come up with tests earilier.
