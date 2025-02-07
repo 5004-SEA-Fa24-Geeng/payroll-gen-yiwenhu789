@@ -86,7 +86,7 @@ public interface IEmployee {
      * 
      * If either type of employee has < 0 hours, they are skipped this payroll period. 
      * (suggestion return null, and skip adding nulls to your paystub list)
-     * 
+     *
      * Final net pay is calculated as pay - pretaxDeductions - taxes.
      * 
      * All numbers (across all methods) are rounded to the nearest cent. (2 decimal places)

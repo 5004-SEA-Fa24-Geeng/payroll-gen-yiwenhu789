@@ -32,13 +32,20 @@ public final class Builder {
         String name = parts[1].trim();
         String id = parts[2].trim();
 
-        double payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid;
+        double payRate;
+        double pretaxDeductions;
+        double ytdEarnings;
+        double ytdTaxesPaid;
 
         try {
             payRate = Double.parseDouble(parts[3]);
             pretaxDeductions = Double.parseDouble(parts[4]);
             ytdEarnings = Double.parseDouble(parts[5]);
             ytdTaxesPaid = Double.parseDouble(parts[6]);
+
+            if (payRate < 0 || pretaxDeductions < 0) {
+                throw new IllegalArgumentException("Negative values in employee data are not allowed: " + csv);
+            }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Error parsing numeric values in CSV: " + csv, e);
         }
