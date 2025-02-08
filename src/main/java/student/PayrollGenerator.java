@@ -105,6 +105,7 @@ public final class PayrollGenerator {
          payStubLines.add(0, FileUtil.PAY_STUB_HEADER);
          FileUtil.writeFile(arguments.getPayrollFile(), payStubLines);
 
+        System.out.println("Main method completed successfully!");
     }
 
 
