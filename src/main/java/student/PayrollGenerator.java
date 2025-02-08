@@ -1,6 +1,8 @@
 package student;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.LinkedList;
 
@@ -69,25 +71,29 @@ public final class PayrollGenerator {
         // as it is invalid, but if is 0, you still generate a paystub, but the amount is 0.
 
         //YOUR CODE HERE
-        System.out.println("Loaded " + employeeLines.size() + " employees.");
-        System.out.println("Loaded " + timeCardList.size() + " time cards.");
+        Map<String, IEmployee> employeeMap = new HashMap<>();
+        for (IEmployee employee : employees) {
+            employeeMap.put(employee.getID(), employee);
+        }
+
         System.out.println("Processing Payroll...");
         for (ITimeCard timeCard : timeCardList) {
-            for (IEmployee employee : employees) {
+            IEmployee employee = employeeMap.get(timeCard.getEmployeeID());
+            if (employee != null) {
                 System.out.println("Running payroll for: " + employee.getName());
-                if (employee.getID().equals(timeCard.getEmployeeID())) {
-                    IPayStub payStub = employee.runPayroll(timeCard.getHoursWorked());
-                    if (payStub != null) {
-                        payStubs.add(payStub);
-                    } else {
-                        System.out.println("Payroll returned null for: " + employee.getName());
-                    }
-                    break;
+                IPayStub payStub = employee.runPayroll(timeCard.getHoursWorked());
+                if (payStub != null) {
+                    payStubs.add(payStub);
+                } else {
+                    System.out.println("Payroll returned null for: " + employee.getName());
                 }
+            } else {
+                System.out.println("No matching employee found for time card ID: " + timeCard.getEmployeeID());
             }
         }
         System.out.println("Payroll processing complete.");
-         // now save out employees to a new file
+
+        // now save out employees to a new file
 
          employeeLines = employees.stream().map(IEmployee::toCSV).collect(Collectors.toList());
          employeeLines.add(0, FileUtil.EMPLOYEE_HEADER);
