@@ -85,17 +85,19 @@ public class SalaryEmployee implements IEmployee {
 
         double grossPay = payRate / 24;
 
-        double taxableIncome = grossPay - pretaxDeductions;
+        BigDecimal taxableIncome = BigDecimal.valueOf(grossPay - pretaxDeductions);
 
-        double taxesPaid = taxableIncome * 0.2265;
+        BigDecimal taxRate = BigDecimal.valueOf(0.2265);
+        BigDecimal taxesPaid = taxableIncome.multiply(taxRate);
 
-        double netPay = taxableIncome - taxesPaid;
+        BigDecimal netPay = taxableIncome.subtract(taxesPaid);
 
-        this.ytdEarnings = round(ytdEarnings + netPay);
-        this.ytdTaxesPaid = round(ytdTaxesPaid + taxesPaid);
+        this.ytdEarnings = round(this.ytdEarnings + netPay.doubleValue());
+        this.ytdTaxesPaid = round(this.ytdTaxesPaid + taxesPaid.doubleValue());
 
-        return new PayStub(this.name, round(netPay), round(taxesPaid), this.ytdEarnings, this.ytdTaxesPaid);
+        return new PayStub(this.name, round(netPay.doubleValue()), round(taxesPaid.doubleValue()), this.ytdEarnings, this.ytdTaxesPaid);
     }
+
 
     private double round(double value) {
         BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);

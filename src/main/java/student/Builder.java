@@ -43,7 +43,7 @@ public final class Builder {
             ytdEarnings = Double.parseDouble(parts[5]);
             ytdTaxesPaid = Double.parseDouble(parts[6]);
 
-            if (payRate < 0 || pretaxDeductions < 0) {
+            if (payRate < 0 || pretaxDeductions < 0 || ytdEarnings < 0 || ytdTaxesPaid < 0) {
                 throw new IllegalArgumentException("Negative values in employee data are not allowed: " + csv);
             }
         } catch (NumberFormatException e) {

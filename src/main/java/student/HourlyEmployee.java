@@ -83,21 +83,27 @@ public class HourlyEmployee implements IEmployee {
             return null;
         }
 
-        double regularHours = Math.min(40, hoursWorked);
-        double overtimeHours = Math.max(0, hoursWorked - 40);
-        double grossPay = regularHours * payRate + overtimeHours * payRate * 1.5;
+        BigDecimal regularHours = BigDecimal.valueOf(Math.min(40, hoursWorked));
+        BigDecimal overtimeHours = BigDecimal.valueOf(Math.max(0, hoursWorked - 40));
+        BigDecimal payRateBD = BigDecimal.valueOf(payRate);
+        BigDecimal pretaxDeductionsBD = BigDecimal.valueOf(pretaxDeductions);
 
-        double taxableIncome = grossPay - pretaxDeductions;
+        BigDecimal grossPay = regularHours.multiply(payRateBD)
+                .add(overtimeHours.multiply(payRateBD.multiply(BigDecimal.valueOf(1.5))));
 
-        double taxesPaid = taxableIncome * 0.2265;
+        BigDecimal taxableIncome = grossPay.subtract(pretaxDeductionsBD);
 
-        double netPay = taxableIncome - taxesPaid;
+        BigDecimal taxRate = BigDecimal.valueOf(0.2265);
+        BigDecimal taxesPaid = taxableIncome.multiply(taxRate);
 
-        this.ytdEarnings = round(ytdEarnings + netPay);
-        this.ytdTaxesPaid = round(ytdTaxesPaid + taxesPaid);
+        BigDecimal netPay = taxableIncome.subtract(taxesPaid);
 
-        return new PayStub(this.name, round(netPay), round(taxesPaid), this.ytdEarnings, this.ytdTaxesPaid);
+        this.ytdEarnings = round(this.ytdEarnings + netPay.doubleValue());
+        this.ytdTaxesPaid = round(this.ytdTaxesPaid + taxesPaid.doubleValue());
+
+        return new PayStub(this.name, round(netPay.doubleValue()), round(taxesPaid.doubleValue()), this.ytdEarnings, this.ytdTaxesPaid);
     }
+
 
     private double round(double value) {
         BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
