@@ -83,4 +83,13 @@ public class EmployeeTest {
 
         assertNull(payStub);
     }
+
+    @Test
+    public void testRunPayroll_LargeValues() {
+        SalaryEmployee employee = new SalaryEmployee("Big Money", "S999", 1_000_000_000.00, 5_000_000.00, 2_000_000.00, 50000.00);
+        IPayStub payStub = employee.runPayroll(40);
+
+        assertNotNull(payStub, "Payroll should handle large salary values");
+        assertTrue(payStub.getPay() > 0, "Net pay should be positive for high salaries");
+    }
 }

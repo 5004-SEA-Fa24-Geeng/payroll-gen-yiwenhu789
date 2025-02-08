@@ -80,6 +80,7 @@ public class HourlyEmployee implements IEmployee {
     @Override
     public IPayStub runPayroll(double hoursWorked) {
         if (hoursWorked < 0) {
+            System.out.println("Skipping payroll for " + name + " due to negative hours.");
             return null;
         }
 
@@ -101,7 +102,8 @@ public class HourlyEmployee implements IEmployee {
         this.ytdEarnings = round(this.ytdEarnings + netPay.doubleValue());
         this.ytdTaxesPaid = round(this.ytdTaxesPaid + taxesPaid.doubleValue());
 
-        return new PayStub(this.name, round(netPay.doubleValue()), round(taxesPaid.doubleValue()), this.ytdEarnings, this.ytdTaxesPaid);
+        return new PayStub(this.name, round(netPay.doubleValue()),
+                            round(taxesPaid.doubleValue()), this.ytdEarnings, this.ytdTaxesPaid);
     }
 
 
